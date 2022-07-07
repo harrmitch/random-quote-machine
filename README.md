@@ -16,9 +16,4 @@ Random Quote Machine is a free, open source quotations machine. It was built as 
 
 ## License
 
-<<<<<<< HEAD
 [MIT licensed](./LICENSE).
-=======
-[MIT Licensed](./LICENSE).
-
-> > > > > > > b6592a0418c2d663dd04243d75a0d25a03734667
