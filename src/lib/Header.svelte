@@ -1,9 +1,13 @@
+<script>
+  import logoUrl from "../assets/favicon.svg";
+</script>
+
 <header>
   <nav class="navbar bg-light">
     <div class="container-fluid">
       <span class="navbar-brand fw-bold">
         <img
-          src="src/assets/favicon.svg"
+          src={logoUrl}
           alt="Logo"
           width="30"
           height="24"
