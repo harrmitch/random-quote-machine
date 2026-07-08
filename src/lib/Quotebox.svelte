@@ -1,16 +1,16 @@
 <script>
   import { fade } from "svelte/transition";
-  import { onMount } from "svelte";
   import randomColor from "randomcolor";
 
-  let currentQuote;
-  let color = "grey";
+  let currentQuote = $state(null);
+  let color = $state("grey");
 
   const getQuote = async () => {
     try {
-      const res = await fetch("https://api.quotable.io/random");
+      const res = await fetch("https://api.quotable.io/quotes/random");
       if (res.ok) {
-        return res.json();
+        const data = await res.json();
+        return data[0];
       }
       return new Error("Error encountered!");
     } catch (err) {
@@ -23,15 +23,17 @@
       currentQuote = await getQuote();
       color = randomColor({ luminosity: "dark" });
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
     }
   };
 
-  onMount(() => {
+  $effect(() => {
     getNewQuote();
   });
 
-  $: document.documentElement.style.setProperty("--color", color);
+  $effect(() => {
+    document.documentElement.style.setProperty("--color", color);
+  });
 </script>
 
 {#if currentQuote}
@@ -45,12 +47,12 @@
         <figure>
           <blockquote class="text-center">
             <p style:color id="text" class="fs-3">
-              <i class="bi bi-quote" />
+              <i class="bi bi-quote"></i>
               {currentQuote.content}
             </p>
           </blockquote>
           <figcaption style:color class="fs-5 text-end fst-italic" id="author">
-            - {currentQuote.author}
+            by {currentQuote.author}
           </figcaption>
         </figure>
       </section>
@@ -59,18 +61,18 @@
     {#key color}
       <section>
         <div in:fade class="d-inline pt-3">
-          <a
+          <a aria-label="Tweet this quote!"
             style:background-color={color}
             class="btn text-white"
             id="tweet-quote"
             href={`https://twitter.com/intent/tweet?hashtags=quotes&text="${currentQuote.content}" ${currentQuote.author}`}
-            target="_blank"><i class="bi bi-twitter" /></a
+            target="_blank"><i class="bi bi-twitter"></i></a
           >
-          <a
+          <button
             style:background-color={color}
             class="btn text-white float-end"
             id="new-quote"
-            on:click={getNewQuote}>New quote</a
+            onclick={getNewQuote}>New quote</button
           >
         </div>
       </section>
